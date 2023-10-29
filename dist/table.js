@@ -180,6 +180,7 @@ class Table {
                     if (match[0])
                         group.groupName = match[0];
                 }
+                1;
                 withElement('o', (child) => {
                     group.className = child.text();
                     group.classId = Table.getId(child, 'o');
