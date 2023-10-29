@@ -185,10 +185,11 @@ export default class Table {
 
         if (!group.groupName) {
           let match = el.text().trim().match(/-?\d+\/\d+/);
-          if (!match) return;
-          if(match[0].startsWith("-")) match[0] = match[0].replace("-", "")
-          if (match[0]) group.groupName = match[0];
-        }1
+          if (match) { 
+            if(match[0].startsWith("-")) match[0] = match[0].replace("-", "")
+            if (match[0]) group.groupName = match[0];
+          }
+        }
 
         withElement('o', (child): void => {
           group.className = child.text();
