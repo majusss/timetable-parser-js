@@ -175,11 +175,12 @@ export default class Table {
 
         withElement('p', (child): void => {
           const match = child.text().trim().match(/^(.*?)(?:-(\d+\/\d+))?$/);
-          if (!match) return;
-          if (match[2]) group.groupName = match[2];
-          if (match[1]) {
-            if (common.subject) common.subject += ' ';
-            common.subject += match[1].trim();
+          if (match) {
+            if (match[2]) group.groupName = match[2];
+            if (match[1]) {
+              if (common.subject) common.subject += ' ';
+              common.subject += match[1].trim();
+            }
           }
         });
 
