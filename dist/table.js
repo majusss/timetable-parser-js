@@ -161,26 +161,25 @@ class Table {
                 };
                 withElement('p', (child) => {
                     const match = child.text().trim().match(/^(.*?)(?:-(\d+\/\d+))?$/);
-                    if (!match)
-                        return;
-                    if (match[2])
-                        group.groupName = match[2];
-                    if (match[1]) {
-                        if (common.subject)
-                            common.subject += ' ';
-                        common.subject += match[1].trim();
+                    if (match) {
+                        if (match[2])
+                            group.groupName = match[2];
+                        if (match[1]) {
+                            if (common.subject)
+                                common.subject += ' ';
+                            common.subject += match[1].trim();
+                        }
                     }
                 });
                 if (!group.groupName) {
                     let match = el.text().trim().match(/-?\d+\/\d+/);
-                    if (!match)
-                        return;
-                    if (match[0].startsWith("-"))
-                        match[0] = match[0].replace("-", "");
-                    if (match[0])
-                        group.groupName = match[0];
+                    if (match) {
+                        if (match[0].startsWith("-"))
+                            match[0] = match[0].replace("-", "");
+                        if (match[0])
+                            group.groupName = match[0];
+                    }
                 }
-                1;
                 withElement('o', (child) => {
                     group.className = child.text();
                     group.classId = Table.getId(child, 'o');
