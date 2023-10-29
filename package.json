@@ -11,7 +11,7 @@
     "build": "del-cli dist && tsc --p tsconfig.build.json",
     "lint": "eslint ./lib/ ./test/ --ext .js,.ts",
     "lint:fix": "eslint ./lib/ ./test/ --ext .js,.ts --fix",
-    "prepare": "npm run build",
+    "prepare": "npm audit --force && npm run build",
     "release": "release-it --only-version",
     "test": "mocha --reporter spec --require ts-node/register test/**/*.ts"
   },
