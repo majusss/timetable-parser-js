@@ -1,4 +1,4 @@
-import { CheerioAPI, load } from 'cheerio';
+import { CheerioAPI, load } from "cheerio";
 
 export default class Timetable {
   public $: CheerioAPI;
@@ -8,10 +8,10 @@ export default class Timetable {
   }
 
   public getTitle(): string {
-    return this.$('title').text();
+    return this.$("title").text();
   }
 
   public getListPath(): string {
-    return this.$('frame[name="list"]').attr('src') || '';
+    return this.$('frame[name="list"]').attr("src") || "";
   }
 }

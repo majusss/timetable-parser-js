@@ -9,10 +9,8 @@
   ],
   "scripts": {
     "build": "del-cli dist && tsc --p tsconfig.build.json",
-    "lint": "eslint ./lib/ ./test/ --ext .js,.ts",
-    "lint:fix": "eslint ./lib/ ./test/ --ext .js,.ts --fix",
-    "release": "release-it --only-version",
-    "test": "mocha --reporter spec --require ts-node/register test/**/*.ts"
+    "test": "mocha --reporter spec --require ts-node/register test/**/*.ts",
+    "test:zstio": "mocha --reporter spec --require ts-node/register test/zstio.ts"
   },
   "author": "Dominik Korsa <dominik.korsa@gmail.com>",
   "repository": {
@@ -21,6 +19,7 @@
   },
   "license": "MIT",
   "devDependencies": {
+    "@types/node": "^20.10.1",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
@@ -28,9 +27,7 @@
     "chai": "^4.3.6",
     "del-cli": "^5.1.0",
     "eslint": "^8.49.0",
-    "eslint-config-airbnb-typescript": "^17.1.0",
     "mocha": "^10.2.0",
-    "release-it": "^16.2.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2"
   },

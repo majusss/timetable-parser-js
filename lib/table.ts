@@ -1,7 +1,5 @@
-import {
-  AnyNode, Cheerio, CheerioAPI, Element, load,
-} from 'cheerio';
-import { TableHour, TableLesson } from './types';
+import { AnyNode, Cheerio, CheerioAPI, Element, load } from "cheerio";
+import { TableHour, TableLesson } from "./types";
 
 export default class Table {
   public $: CheerioAPI;
@@ -14,24 +12,24 @@ export default class Table {
    * Parses the text from the header, for instance class name
    */
   public getTitle(): string {
-    return this.$('.tytulnapis').text();
+    return this.$(".tytulnapis").text();
   }
 
   public getDayNames(): string[] {
-    return this.$('.tabela tr:first-of-type th')
+    return this.$(".tabela tr:first-of-type th")
       .toArray()
       .map((element: Element): string => this.$(element).text())
       .slice(2);
   }
 
   public getHours(): Record<number, TableHour> {
-    const rows = this.$('.tabela tr:not(:first-of-type)');
+    const rows = this.$(".tabela tr:not(:first-of-type)");
     const hours: Record<number, TableHour> = {};
     rows.each((_, row): void => {
-      const number = parseInt(this.$(row).find('.nr').text().trim(), 10);
-      const timesText = this.$(row).find('.g').text();
+      const number = parseInt(this.$(row).find(".nr").text().trim(), 10);
+      const timesText = this.$(row).find(".g").text();
       const [timeFrom, timeTo] = timesText
-        .split('-')
+        .split("-")
         .map((e): string => e.trim());
       hours[number] = {
         number,
@@ -43,18 +41,18 @@ export default class Table {
   }
 
   /*
-  * Return table in original form (without transposing) for easier displaying.
-  */
+   * Return table in original form (without transposing) for easier displaying.
+   */
   public getRawDays(): TableLesson[][][] {
-    const rows = this.$('.tabela tr:not(:first-of-type)').toArray();
+    const rows = this.$(".tabela tr:not(:first-of-type)").toArray();
 
     const days: TableLesson[][][] = [];
 
     rows.forEach((row, index): void => {
-      const lessons = this.$(row).find('.l').toArray();
+      const lessons = this.$(row).find(".l").toArray();
       lessons.forEach((lesson): void => {
         if (!days[index]) days.push([]);
-        if (this.$(lesson).text().trim() === '') {
+        if (this.$(lesson).text().trim() === "") {
           days[index].push([]);
         } else if (this.$(lesson).children().length === 0) {
           days[index].push([{ subject: this.$(lesson).text().trim() }]);
@@ -69,21 +67,15 @@ export default class Table {
   }
 
   public getDays(): TableLesson[][][] {
-    const rows = this.$('.tabela tr:not(:first-of-type)').toArray();
+    const rows = this.$(".tabela tr:not(:first-of-type)").toArray();
 
-    const days: TableLesson[][][] = [
-      [],
-      [],
-      [],
-      [],
-      [],
-    ];
+    const days: TableLesson[][][] = [[], [], [], [], []];
 
     rows.forEach((row): void => {
       this.$(row)
-        .find('.l')
+        .find(".l")
         .each((index, lesson): void => {
-          if (this.$(lesson).text().trim() === '') {
+          if (this.$(lesson).text().trim() === "") {
             days[index].push([]);
           } else if (this.$(lesson).children().length === 0) {
             days[index].push([{ subject: this.$(lesson).text().trim() }]);
@@ -102,16 +94,21 @@ export default class Table {
    */
   public getGeneratedDate(): string | null {
     const regex = /wygenerowano (\d{1,4})[./-](\d{1,2})[./-](\d{1,4})/;
-    return this.$('td')
-      .toArray()
-      .map((e): string | null => {
-        const match = regex.exec(this.$(e).text());
-        if (match === null) return null;
-        const parts = [match[1], match[2], match[3]];
-        if (parts[0].length !== 4) parts.reverse();
-        return `${parts[0]}-${parts[1].padStart(2, '0')}-${parts[2].padStart(2, '0')}`;
-      })
-      .filter((e): boolean => e != null)[0] || null;
+    return (
+      this.$("td")
+        .toArray()
+        .map((e): string | null => {
+          const match = regex.exec(this.$(e).text());
+          if (match === null) return null;
+          const parts = [match[1], match[2], match[3]];
+          if (parts[0].length !== 4) parts.reverse();
+          return `${parts[0]}-${parts[1].padStart(2, "0")}-${parts[2].padStart(
+            2,
+            "0"
+          )}`;
+        })
+        .filter((e): boolean => e != null)[0] || null
+    );
   }
 
   /*
@@ -119,18 +116,23 @@ export default class Table {
    */
   public getVersionInfo(): string {
     const regex = /^Obowiązuje od: (.+)$/;
-    return this.$('td')
-      .toArray()
-      .map((e): string | null => {
-        const match = regex.exec(this.$(e).text().trim());
-        if (match === null) return '';
-        return match[1].trim();
-      })
-      .filter((e): boolean => e !== '')[0] || '';
+    return (
+      this.$("td")
+        .toArray()
+        .map((e): string | null => {
+          const match = regex.exec(this.$(e).text().trim());
+          if (match === null) return "";
+          return match[1].trim();
+        })
+        .filter((e): boolean => e !== "")[0] || ""
+    );
   }
 
-  private static getId(el: Cheerio<AnyNode>, letter: string): string | undefined {
-    const href = el.attr('href') || '';
+  private static getId(
+    el: Cheerio<AnyNode>,
+    letter: string
+  ): string | undefined {
+    const href = el.attr("href") || "";
     return new RegExp(`^${letter}(.+)\\.html$`).exec(href)?.[1];
   }
 
@@ -138,7 +140,7 @@ export default class Table {
     const lines: Cheerio<AnyNode>[][] = [[]];
 
     nodes.each((_, node) => {
-      if ('tagName' in node && node.tagName === 'br') {
+      if ("tagName" in node && node.tagName === "br") {
         lines.push([]);
         return;
       }
@@ -146,16 +148,22 @@ export default class Table {
     });
 
     return lines.flatMap((line): TableLesson[] => {
-      const common: Pick<TableLesson, 'teacher' | 'teacherId' | 'room' | 'roomId' | 'subject'> = { subject: '' };
+      const common: Pick<
+        TableLesson,
+        "teacher" | "teacherId" | "room" | "roomId" | "subject"
+      > = { subject: "" };
       const groups: Partial<Omit<TableLesson, keyof typeof common>>[] = [{}];
       line.forEach((el) => {
-        if (el[0].type === 'text') {
-          el.text().split(',').forEach((part, index) => {
-            if (index > 0) groups.push({});
-            if (part.trim() === '') return;
-            const groupNameMatch = part.trim().match(/-(\d+\/\d+)/);
-            if (groupNameMatch !== null) groups[groups.length - 1].groupName = groupNameMatch[1];
-          });
+        if (el[0].type === "text") {
+          el.text()
+            .split(",")
+            .forEach((part, index) => {
+              if (index > 0) groups.push({});
+              if (part.trim() === "") return;
+              const groupNameMatch = part.trim().match(/-(\d+\/\d+)/);
+              if (groupNameMatch !== null)
+                groups[groups.length - 1].groupName = groupNameMatch[1];
+            });
           return;
         }
 
@@ -163,7 +171,7 @@ export default class Table {
 
         const withElement = (
           className: string,
-          callback: (child: Cheerio<AnyNode>) => void,
+          callback: (child: Cheerio<AnyNode>) => void
         ) => {
           if (el.hasClass(className)) {
             callback(el);
@@ -173,41 +181,47 @@ export default class Table {
           if (children.length > 0) callback(children);
         };
 
-        withElement('p', (child): void => {
-          const match = child.text().trim().match(/^(.*?)(?:-(\d+\/\d+))?$/);
+        withElement("p", (child): void => {
+          const match = child
+            .text()
+            .trim()
+            .match(/^(.*?)(?:-(\d+\/\d+))?$/);
           if (match) {
             if (match[2]) group.groupName = match[2];
             if (match[1]) {
-              if (common.subject) common.subject += ' ';
+              if (common.subject) common.subject += " ";
               common.subject += match[1].trim();
             }
           }
         });
 
         if (!group.groupName) {
-          let match = el.text().trim().match(/-?\d+\/\d+/);
-          if (match) { 
-            if(match[0].startsWith("-")) match[0] = match[0].replace("-", "")
+          let match = el
+            .text()
+            .trim()
+            .match(/((-\d+\/\d+)|(-E))/);
+          if (match) {
+            if (match[0].startsWith("-")) match[0] = match[0].replace("-", "");
             if (match[0]) group.groupName = match[0];
           }
         }
 
-        withElement('o', (child): void => {
+        withElement("o", (child): void => {
           group.className = child.text();
-          group.classId = Table.getId(child, 'o');
+          group.classId = Table.getId(child, "o");
         });
 
-        withElement('n', (child): void => {
+        withElement("n", (child): void => {
           common.teacher = child.text();
-          common.teacherId = Table.getId(child, 'n');
+          common.teacherId = Table.getId(child, "n");
         });
 
-        withElement('s', (child): void => {
+        withElement("s", (child): void => {
           common.room = child.text();
-          common.roomId = Table.getId(child, 's');
+          common.roomId = Table.getId(child, "s");
         });
       });
-      if (common.subject.trim() === '') return [];
+      if (common.subject.trim() === "") return [];
       return groups.map((group) => ({
         ...common,
         ...group,

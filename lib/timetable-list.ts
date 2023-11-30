@@ -1,5 +1,5 @@
-import { CheerioAPI, load } from 'cheerio';
-import { List, ListItem } from './types';
+import { CheerioAPI, load } from "cheerio";
+import { List, ListItem } from "./types";
 
 export default class TimetableList {
   public $: CheerioAPI;
@@ -9,9 +9,10 @@ export default class TimetableList {
   }
 
   public getList(): List {
-    if (this.getListType() === 'select') {
+    if (this.getListType() === "select") {
       return this.getSelectList();
-    } if (this.getListType() === 'unordered') {
+    }
+    if (this.getListType() === "unordered") {
       return this.getUnorderedList();
     }
 
@@ -19,26 +20,26 @@ export default class TimetableList {
   }
 
   public getListType(): string {
-    if (this.$('form[name=form]').length > 0) {
-      return 'select';
+    if (this.$("form[name=form]").length > 0) {
+      return "select";
     }
 
-    if (this.$('body table').length > 0) {
-      return 'expandable';
+    if (this.$("body table").length > 0) {
+      return "expandable";
     }
 
-    return 'unordered';
+    return "unordered";
   }
 
   public getLogoSrc(): string | null {
-    return this.$('.logo img').attr('src') || null;
+    return this.$(".logo img").attr("src") || null;
   }
 
   private getSelectList(): List {
     return {
-      classes: this.getSelectListValues('oddzialy'),
-      teachers: this.getSelectListValues('nauczyciele'),
-      rooms: this.getSelectListValues('sale'),
+      classes: this.getSelectListValues("oddzialy"),
+      teachers: this.getSelectListValues("nauczyciele"),
+      rooms: this.getSelectListValues("sale"),
     };
   }
 
@@ -50,7 +51,7 @@ export default class TimetableList {
     nodes.forEach((node): void => {
       values.push({
         name: this.$(node).text(),
-        value: this.$(node).attr('value') || '',
+        value: this.$(node).attr("value") || "",
       });
     });
 
@@ -59,38 +60,38 @@ export default class TimetableList {
 
   private getExpandableList(): List {
     return this.getTimetableUrlSubType(
-      '#oddzialy a',
-      '#nauczyciele a',
-      '#sale a',
+      "#oddzialy a",
+      "#nauczyciele a",
+      "#sale a"
     );
   }
 
   private getUnorderedList(): List {
-    let teachersQuery = 'ul:nth-of-type(2) a';
-    let roomsQuery = 'ul:nth-of-type(3) a';
-    if (this.$('h4').length === 1) {
-      teachersQuery = 'undefined';
-      roomsQuery = 'undefined';
-    } else if (this.$('h4:nth-of-type(2)').text() === 'Sale') {
-      teachersQuery = 'undefined';
-      roomsQuery = 'ul:nth-of-type(2) a';
+    let teachersQuery = "ul:nth-of-type(2) a";
+    let roomsQuery = "ul:nth-of-type(3) a";
+    if (this.$("h4").length === 1) {
+      teachersQuery = "undefined";
+      roomsQuery = "undefined";
+    } else if (this.$("h4:nth-of-type(2)").text() === "Sale") {
+      teachersQuery = "undefined";
+      roomsQuery = "ul:nth-of-type(2) a";
     }
     return this.getTimetableUrlSubType(
-      'ul:first-of-type a',
+      "ul:first-of-type a",
       teachersQuery,
-      roomsQuery,
+      roomsQuery
     );
   }
 
   private getTimetableUrlSubType(
     classQuery: string,
     teachersQuery: string,
-    roomsQuery: string,
+    roomsQuery: string
   ): List {
     return {
-      classes: this.getSubTypeValue(classQuery, 'o'),
-      teachers: this.getSubTypeValue(teachersQuery, 'n'),
-      rooms: this.getSubTypeValue(roomsQuery, 's'),
+      classes: this.getSubTypeValue(classQuery, "o"),
+      teachers: this.getSubTypeValue(teachersQuery, "n"),
+      rooms: this.getSubTypeValue(roomsQuery, "s"),
     };
   }
 
@@ -100,7 +101,11 @@ export default class TimetableList {
     this.$(query).each((_, node) => {
       values.push({
         name: this.$(node).text(),
-        value: this.$(node).attr('href')?.replace('.html', '').replace(`plany/${prefix}`, '') || '',
+        value:
+          this.$(node)
+            .attr("href")
+            ?.replace(".html", "")
+            .replace(`plany/${prefix}`, "") || "",
       });
     });
 
