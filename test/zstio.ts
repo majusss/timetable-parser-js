@@ -53,4 +53,16 @@ describe("ZSTiO test", () => {
 
     expect(table.getDays()[1][6][0].groupName).eq("A");
   });
+
+  it("Subject checking in branch (3TG)", async () => {
+    const timetableSrc = await (
+      await fetch("http://www.zstio-elektronika.pl/plan/plany/o20.html")
+    ).text();
+
+    const table = new Table(timetableSrc);
+    it("Cheerio init", (): void => {
+      expect((): Table => new Table(timetableSrc)).not.to.throw();
+    });
+    expect(table.getDays()[0][0][0].subject).eq("druk.cyfrowe");
+  });
 });

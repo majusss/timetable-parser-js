@@ -188,23 +188,28 @@ export default class Table {
             .match(/^(.*?)(?:-(\d+\/\d+))?$/);
           if (match) {
             if (match[2]) group.groupName = match[2];
+            if (!group.groupName) {
+              let match = el
+                .text()
+                .trim()
+                .match(/((-\d+\/\d+)|(-[A-Z]))/);
+              if (match) {
+                if (match[0].startsWith("-"))
+                  match[0] = match[0].replace("-", "");
+                if (match[0]) group.groupName = match[0];
+              }
+            }
             if (match[1]) {
-              if (common.subject) common.subject += " ";
-              common.subject += match[1].trim();
+              if (match[1].trim().match(/(-[A-Z])$/)) {
+                if (common.subject) common.subject += " ";
+                common.subject += match[1].trim().replace(/(-[A-Z])$/, "");
+              } else {
+                if (common.subject) common.subject += " ";
+                common.subject += match[1].trim();
+              }
             }
           }
         });
-
-        if (!group.groupName) {
-          let match = el
-            .text()
-            .trim()
-            .match(/((-\d+\/\d+)|(-[A-Z]))/);
-          if (match) {
-            if (match[0].startsWith("-")) match[0] = match[0].replace("-", "");
-            if (match[0]) group.groupName = match[0];
-          }
-        }
 
         withElement("o", (child): void => {
           group.className = child.text();
