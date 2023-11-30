@@ -199,7 +199,7 @@ export default class Table {
           let match = el
             .text()
             .trim()
-            .match(/((-\d+\/\d+)|(-E))/);
+            .match(/((-\d+\/\d+)|(-[A-Z]))/);
           if (match) {
             if (match[0].startsWith("-")) match[0] = match[0].replace("-", "");
             if (match[0]) group.groupName = match[0];

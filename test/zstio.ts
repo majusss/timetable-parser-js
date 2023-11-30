@@ -27,4 +27,30 @@ describe("ZSTiO test", () => {
 
     expect(table.getDays()[1][3][0].groupName).eq("E");
   });
+
+  it("Branch groups checking in teachers (Wó)", async () => {
+    const timetableSrc = await (
+      await fetch("http://www.zstio-elektronika.pl/plan/plany/n67.html")
+    ).text();
+
+    const table = new Table(timetableSrc);
+    it("Cheerio init", (): void => {
+      expect((): Table => new Table(timetableSrc)).not.to.throw();
+    });
+
+    expect(table.getDays()[0][6][0].groupName).eq("M");
+  });
+
+  it("Branch groups checking in teachers (Zi)", async () => {
+    const timetableSrc = await (
+      await fetch("http://www.zstio-elektronika.pl/plan/plany/n69.html")
+    ).text();
+
+    const table = new Table(timetableSrc);
+    it("Cheerio init", (): void => {
+      expect((): Table => new Table(timetableSrc)).not.to.throw();
+    });
+
+    expect(table.getDays()[1][6][0].groupName).eq("A");
+  });
 });
