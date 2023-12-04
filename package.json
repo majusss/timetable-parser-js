@@ -9,7 +9,7 @@
   ],
   "scripts": {
     "build": "del-cli dist && tsc --p tsconfig.build.json",
-    "prepare": "npm run build",
+    "prepare": "yarn build",
     "test": "mocha --reporter spec --require ts-node/register test/**/*.ts",
     "test:zstio": "mocha --reporter spec --require ts-node/register test/zstio.ts"
   },
