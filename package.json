@@ -8,8 +8,8 @@
     "/dist"
   ],
   "scripts": {
-    "build": "del-cli dist && tsc --p tsconfig.build.json",
-    "prepare": "yarn build",
+    "build": "tsc --p tsconfig.build.json",
+    "prepare": "npm run build",
     "test": "mocha --reporter spec --require ts-node/register test/**/*.ts",
     "test:zstio": "mocha --reporter spec --require ts-node/register test/zstio.ts"
   },
@@ -20,13 +20,12 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@types/node": "^20.10.1",
     "@types/chai": "^4.3.6",
     "@types/mocha": "^10.0.1",
+    "@types/node": "^20.10.1",
     "@typescript-eslint/eslint-plugin": "^6.6.0",
     "@typescript-eslint/parser": "^6.6.0",
     "chai": "^4.3.6",
-    "del-cli": "^5.1.0",
     "eslint": "^8.49.0",
     "mocha": "^10.2.0",
     "ts-node": "^10.9.1",
