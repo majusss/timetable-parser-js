@@ -9,7 +9,6 @@
   ],
   "scripts": {
     "build": "tsc --p tsconfig.build.json",
-    "prepare": "npm run build",
     "test": "mocha --reporter spec --require ts-node/register test/**/*.ts",
     "test:zstio": "mocha --reporter spec --require ts-node/register test/zstio.ts"
   },
