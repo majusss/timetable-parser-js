@@ -1,6 +1,6 @@
 {
-  "name": "@wulkanowy/timetable-parser",
-  "version": "1.6.0",
+  "name": "@majusss/timetable-parser",
+  "version": "1.7.0",
   "description": "VULCAN Optivum Timetable parser for JavaScript",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,10 +12,10 @@
     "test": "mocha --reporter spec --require ts-node/register test/**/*.ts",
     "test:zstio": "mocha --reporter spec --require ts-node/register test/zstio.ts"
   },
-  "author": "Dominik Korsa <dominik.korsa@gmail.com>",
+  "author": "Kacper Majcher <majchermajus@proton.me>",
   "repository": {
     "type": "git",
-    "url": "https://github.com/wulkanowy/timetable-parser-js.git"
+    "url": "https://github.com/majusss/timetable-parser-js.git"
   },
   "license": "MIT",
   "devDependencies": {
